@@ -6,7 +6,7 @@ import { Card } from 'antd';
 function App() {
   return (
     <div className="App">
-      <Card style={{height: 'auto', margin: '25px', padding: '20px'}} className="shadow">
+      <Card style={{height: 'auto', margin: '25px', padding: '5px'}} className="shadow">
         <StepsComponent />
         <BaseForm />
       </Card>

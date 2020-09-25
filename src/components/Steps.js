@@ -13,5 +13,4 @@ function StepsComponent(){
         </Steps>
     )
 }
-
 export default StepsComponent

@@ -1,4 +1,4 @@
-import React, {  } from 'react'
+import React, { useState } from 'react'
 import 'antd/dist/antd.css';
 import {
     Divider,
@@ -19,7 +19,8 @@ const { Group } = Radio
 const { Option } = Select
 
 function BaseForm(){
-    // const refBtn = React.createRef()
+    const [documentoIdentidad, setDocumentoIdentidad] = useState('')
+    const [tipoDocumento, setTipoDocumento] = useState('')
 
     const formItemLayout = {
         labelCol:{
@@ -30,7 +31,7 @@ function BaseForm(){
                 span: 12
             },
             md: {
-                span: 8
+                span: 7
             },
             wrapperol: {
                 xs: {
@@ -43,11 +44,29 @@ function BaseForm(){
         }
     }
 
+    const onFinish = values => {
+        const { tipoDocumento, nacionalidad, fechaNacimiento, sexo, estadoCivil, categoria } = values
+        if(
+            !tipoDocumento || !nacionalidad || !fechaNacimiento || !sexo || !estadoCivil || !categoria
+        ) {
+            alert('Llenar todos los campos requeridos!')
+        } else{
+            console.log('Success:', values);
+            
+        }
+    };
+
+    const handleChangeDocument = documento => {
+        const valor = documento.target.value
+        setDocumentoIdentidad(documento)
+        valor === 'cedula'? setTipoDocumento("number") : setTipoDocumento("text") 
+    }
+
     return (
         <>
         <Divider orientation="left"><h3 className="title">Datos Generales</h3></Divider>
-          <Form {...formItemLayout}>          
-            <Row gutter={[0, 0]}>
+          <Form style={{paddingLeft: '14px'}} {...formItemLayout} onFinish={onFinish}>          
+            <Row gutter={[16, 0]}>
                 <Col span={12}>
                     <Item label="Código:">
                         <Input placeholder="Código persona" disabled/>
@@ -57,48 +76,44 @@ function BaseForm(){
                 <Col span={12}></Col>
 
                 <Col span={12}  >
-                    <Item label="Tipo documento:">
-                        <Group>
-                            <Radio value="Cédula">Cédula</Radio>
-                            <Radio value="Pasaporte">Pasaporte</Radio>
+                    <Item label="Tipo documento:" name="tipoDocumento">
+                        <Group onChange={handleChangeDocument}>
+                            <Radio value="cedula">Cédula</Radio>
+                            <Radio value="pasaporte">Pasaporte</Radio>
                         </Group>
                     </Item>
                 </Col>
-
                 <Col span={12}  >
-                    <Item label="Doc. Identidad:">
-                    <Input placeholder="Elige el tipo de documento (Cédula o pasaporte" disabled/>
+                    <Item label="Doc. Identidad:" name="documentoIdentidad">
+                    <Input 
+                        placeholder="Elige el tipo de documento (Cédula o pasaporte" 
+                        disabled={documentoIdentidad ? false : true } 
+                        type={tipoDocumento}
+                        required
+                    />
                     </Item>
                 </Col>
-
                 <Col span={12}>
-                    <Item label="Nombre(s):">
-                        <Input placeholder="Nombre(s)" />
+                    <Item label="Nombre(s):" name="nombre(s)"> 
+                        <Input placeholder="Nombre(s)" required/>
                     </Item>
                 </Col>
-
                 <Col span={12} >
-                    <Item label="Apellido(s):">
-                        <Input placeholder="Apellido(s)" />
+                    <Item label="Apellido(s):" name="apellido(s)">
+                        <Input placeholder="Apellido(s)" required/>
                     </Item>
                 </Col>
-
                 <Col span={12} >
-                    <Item label="Apodo:">
+                    <Item label="Apodo:" name="apodo">
                         <Input placeholder="Apodo(opcional)" />
                     </Item>
                 </Col>
-
                 <Col span={12} >
-                        <Item label="Nacionalidad:">
+                        <Item label="Nacionalidad:" name="nacionalidad" >
                         <Select
                             showSearch
                             placeholder="Nacionalidad"
                             optionFilterProp="children"
-                            // onChange={onChange}
-                            // onFocus={onFocus}
-                            // onBlur={onBlur}
-                            // onSearch={onSearch}
                             filterOption={(input, option) =>
                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
@@ -111,47 +126,42 @@ function BaseForm(){
                             <Option value="BULGARA">BULGARA</Option>
                             <Option value="CANADA">CANADA</Option>
                             <Option value="CHINA">CHINA</Option>
-                            <Option value="BRASILEÑA">CHILE</Option>
-                            <Option value="BRASILEÑA">COLOMBIA</Option>
-                            <Option value="BRASILEÑA">CUBA</Option>
+                            <Option value="CHILE">CHILE</Option>
+                            <Option value="COLOMBIA">COLOMBIA</Option>
+                            <Option value="CUBA">CUBA</Option>
                         </Select>
                         </Item>
                 </Col>
-
                 <Col span={12} >
-                    <Item label="Lugar de nac:">
-                        <Input placeholder="Lugar de nacimiento" />
+                    <Item label="Lugar de nac:" name="lugarNacimiento">
+                        <Input placeholder="Lugar de nacimiento" required/>
                     </Item>
                 </Col>
-
                 <Col span={12} >
-                    <Item label="Fecha de nacimiento:">
+                    <Item label="Fecha de nacimiento:" name="fechaNacimiento">
                         <DatePicker placeholder="Fecha de nacimiento" locale={locale} />
                     </Item>
                 </Col>
-
                 <Col span={12} >
-                    <Item label="Sexo:">
-                        <Group>
+                    <Item label="Sexo:" name="sexo">
+                        <Group required>
                             <Radio value="Masculino">Masculino</Radio>
                             <Radio value="Femenino">Femenino</Radio>
                         </Group>
                     </Item>
                 </Col>
-
                 <Col span={12}  >
-                    <Item label="Estado Civil:">
-                        <Group>
+                    <Item label="Estado Civil:" name="estadoCivil">
+                        <Group required>
                             <Radio value="Soltero">Soltero(a)</Radio>
                             <Radio value="Casado">Casado(a)</Radio>
                             <Radio value="UnionLibre">Unión libre</Radio>
                         </Group>
                     </Item>
                 </Col>
-
                 <Col span={12} >
-                    <Item label="Categoría solicitada:">
-                        <Select placeholder="Categoria solicitada">
+                    <Item label="Categoría solicitada:" name="categoria">
+                        <Select placeholder="Categoria solicitada" required>
                             <Option value="EMPRESERIAL">EMPRESERIAL</Option>
                             <Option value="MICROEMPRESARIAL">MICROEMPRESARIAL</Option>
                             <Option value="RELACIONADO">RELACIONADO</Option>
@@ -162,11 +172,11 @@ function BaseForm(){
 
                 <Col span={12}></Col>
 
-                <Col span={4}>
-                    <Button type="primary" htmlType="button" icon={<ArrowRightOutlined />}>Siguiente</Button>
+                <Col span={4} offset={20}>
+                    <Button type="primary" htmlType="button" icon={<PlusOutlined style={{fontSize: 15}} />}>Agregar relacionado</Button>
                 </Col>
-                <Col span={4} offset={16}>
-                    <Button type="primary" htmlType="button" icon={<PlusOutlined />}>Agregar relacionado</Button>
+                <Col span={4}>
+                    <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />}>Siguiente</Button>
                 </Col>
             </Row>
           </Form>
